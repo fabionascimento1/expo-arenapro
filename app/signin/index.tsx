@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { AuthContext } from "src/infra/storeManagements";
 
-export default function Login() {
+export default function Signin() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -74,9 +74,10 @@ export default function Login() {
             </Pressable>
           </View>
         </View>
-        <Text className="">
+        <View className="gap-5">
+          <Link href="/signup/">Criar a sua conta!</Link>
           <Link href={() => router.back()}>Voltar</Link>
-        </Text>
+        </View>
       </View>
     </View>
   );

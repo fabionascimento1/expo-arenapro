@@ -22,7 +22,7 @@ export default function App() {
         Open up App.js to start working on your app!5
       </Text>
       <Text className="text-white">
-        <Link href="/login/">Login</Link>
+        <Link href="/signin/">Entrar no sistema</Link>
       </Text>
     </View>
   );
