@@ -4,19 +4,20 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { AuthContext } from "src/infra/storeManagements";
 
 export default function App() {
-  const { isLoading, userToken } = React.useContext(AuthContext);
-  if (isLoading) {
-    return (
-      <View>
-        <ActivityIndicator size={"large"} />
-      </View>
-    );
-  }
-  if (userToken !== null) {
-    return <Redirect href="/dashboard" />;
+  const { userToken } = React.useContext(AuthContext);
+  if (userToken) {
+    const { user } = JSON.parse(userToken);
+    const { type } = user;
+
+    if (userToken != null && type === "player") {
+      return <Redirect href="/player-dashboard/" />;
+    }
+    if (userToken != null && type === "arena") {
+      return <Redirect href="/arena-dashboard/" />;
+    }
   }
   return (
-    <View className="flex-1 items-center justify-center bg-black ">
+    <View className="flex-1 items-center justify-center bg-primary ">
       <Text className="text-white">
         Open up App.js to start working on your app!5
       </Text>
