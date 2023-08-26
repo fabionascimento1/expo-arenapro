@@ -14,9 +14,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundlerIdentifier": "com.fabionascimento.arenapro"
     },
     "android": {
+      "package": "com.fabionascimento.arenapro",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
