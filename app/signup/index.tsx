@@ -17,6 +17,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const SignUpSchema = z.object({
+  type: z.string(),
   name: z.string({
     required_error: "Nome é obrigatório",
   }),
@@ -48,14 +49,17 @@ export default function Signup() {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
+  } = useForm<SignUpSchemaType>({
+    defaultValues: { type: "player" },
+    resolver: zodResolver(SignUpSchema),
+  });
   const { login, userToken } = useContext(AuthContext);
 
   if (userToken != null) {
     return <Redirect href="/" />;
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SignUpSchemaType) => {
     setLoading(true);
     await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/signup`, {
       method: "POST",
