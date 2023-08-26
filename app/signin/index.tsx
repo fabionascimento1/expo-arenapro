@@ -48,14 +48,25 @@ export default function Signin() {
       <Header />
       <View className="p-4 w-full mt-5">
         <View className="container mb-6">
-          <Text className="text-zinc-700 mb-1">E-mail</Text>
+          <Text className="text-zinc-500 mb-1">E-mail</Text>
           <TextInput
-            className="bg-zinc-300 rounded p-2 h-10 mb-3"
+            id="input-email"
+            placeholder="Digite o seu e-mail"
+            placeholderTextColor="#B5B5B5"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            className="bg-zinc-200 rounded p-2 h-10 mb-3"
             onChangeText={(text) => setValue("email", text)}
           />
-          <Text className="text-zinc-700 mt-1 mb-1">Senha</Text>
+          <Text className="text-zinc-500 mt-1 mb-1">Senha</Text>
           <TextInput
-            className="bg-zinc-300 rounded p-2 h-10"
+            id="input-password"
+            placeholder="Digite a sua senha"
+            placeholderTextColor="#B5B5B5"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            keyboardType="default"
+            className="bg-zinc-200 rounded p-2 h-10"
             onChangeText={(text) => setValue("password", text)}
           />
           {error && (
@@ -63,6 +74,7 @@ export default function Signin() {
           )}
           <View className="mt-8">
             <Pressable
+              id="button-entrar"
               className="bg-primary  rounded p-3 justify-center items-center"
               onPress={handleSubmit(onSubmit)}
             >

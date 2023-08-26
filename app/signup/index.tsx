@@ -1,7 +1,7 @@
 import { Header } from "src/components/Header";
 import { Link, Redirect, useRouter } from "expo-router";
 import React, { useContext, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   ActivityIndicator,
@@ -88,19 +88,30 @@ export default function Signup() {
           </TouchableOpacity>
         </View>
         <View className="container mb-6">
-          <Text className="text-zinc-700 mb-1">Nome completo</Text>
+          <Text className="text-zinc-500 mb-1">Nome completo</Text>
           <TextInput
-            className="bg-zinc-300 rounded p-2 h-10 mb-3"
+            className="bg-zinc-200 rounded p-2 h-10 mb-3 "
+            placeholder="Digite seu nome completo"
+            placeholderTextColor="#B5B5B5"
             onChangeText={(text) => setValue("name", text)}
           />
-          <Text className="text-zinc-700 mb-1">E-mail</Text>
+          <Text className="text-zinc-500 mb-1">E-mail</Text>
           <TextInput
-            className="bg-zinc-300 rounded p-2 h-10 mb-3"
+            placeholder="Digite o seu e-mail"
+            placeholderTextColor="#B5B5B5"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            className="bg-zinc-200 rounded p-2 h-10 mb-3"
             onChangeText={(text) => setValue("email", text)}
           />
-          <Text className="text-zinc-700 mt-1 mb-1">Senha</Text>
+          <Text className="text-zinc-500 mt-1 mb-1">Senha</Text>
           <TextInput
-            className="bg-zinc-300 rounded p-2 h-10"
+            placeholder="Digite a sua senha"
+            placeholderTextColor="#B5B5B5"
+            secureTextEntry={true}
+            autoCapitalize="none"
+            keyboardType="default"
+            className="bg-zinc-200 rounded p-2 h-10"
             onChangeText={(text) => setValue("password", text)}
           />
           {error && (
@@ -122,7 +133,7 @@ export default function Signup() {
           </View>
         </View>
         <Text className="">
-          <Link href={() => router.back()}>Voltar</Link>
+          <Link href="/signin/">Voltar</Link>
         </Text>
       </View>
     </View>
