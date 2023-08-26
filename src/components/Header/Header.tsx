@@ -4,9 +4,9 @@ export function Header() {
   return (
     <View className="pt-4">
       <Image
-        className="mb-6"
+        className="mb-3"
         source={require("/assets/images/logo-arena-pro-dark.png")}
-        style={{ height: 50, resizeMode: "contain" }}
+        style={{ height: 45, resizeMode: "contain" }}
       />
     </View>
   );

@@ -11,11 +11,38 @@ import {
 } from "react-native";
 import { AuthContext } from "src/infra/storeManagements";
 
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const SignUpSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email é obrigatório",
+    })
+    .email("Email inválido"),
+  password: z
+    .string({
+      required_error: "Senha é obrigatório",
+    })
+    .min(6, {
+      message: "Senha deve conter no mínimo 6 caracteres",
+    })
+    .max(20, {
+      message: "Senha deve conter no máximo 20 caracteres",
+    }),
+});
+
+type SignUpSchemaType = z.infer<typeof SignUpSchema>;
+
 export default function Signin() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const { setValue, handleSubmit } = useForm();
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
   const { login, userToken } = useContext(AuthContext);
 
   if (userToken != null) {
@@ -43,21 +70,28 @@ export default function Signin() {
     });
   };
 
+  console.log(errors.email?.message);
+
   return (
     <View className="flex-1 items-center justify-center">
       <Header />
-      <View className="p-4 w-full mt-5">
+      <View className="p-5 w-full mt-5">
         <View className="container mb-6">
-          <Text className="text-zinc-500 mb-1">E-mail</Text>
-          <TextInput
-            id="input-email"
-            placeholder="Digite o seu e-mail"
-            placeholderTextColor="#B5B5B5"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            className="bg-zinc-200 rounded p-2 h-10 mb-3"
-            onChangeText={(text) => setValue("email", text)}
-          />
+          <View className="mb-3">
+            <Text className="text-zinc-500 mb-1">E-mail</Text>
+            <TextInput
+              id="input-email"
+              placeholder="Digite o seu e-mail"
+              placeholderTextColor="#B5B5B5"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              className="bg-zinc-200 rounded p-2 h-10"
+              onChangeText={(text) => setValue("email", text)}
+            />
+            {errors.email && (
+              <Text className="text-red-600">{errors.email.message}</Text>
+            )}
+          </View>
           <Text className="text-zinc-500 mt-1 mb-1">Senha</Text>
           <TextInput
             id="input-password"
@@ -69,6 +103,9 @@ export default function Signin() {
             className="bg-zinc-200 rounded p-2 h-10"
             onChangeText={(text) => setValue("password", text)}
           />
+          {errors.password && (
+            <Text className="text-red-600">{errors.password.message}</Text>
+          )}
           {error && (
             <Text className="text-red-600 font-semibold mt-5">{error}</Text>
           )}

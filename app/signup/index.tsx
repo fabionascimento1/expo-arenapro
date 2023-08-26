@@ -13,12 +13,42 @@ import {
 } from "react-native";
 import { AuthContext } from "src/infra/storeManagements";
 
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const SignUpSchema = z.object({
+  name: z.string({
+    required_error: "Nome é obrigatório",
+  }),
+  email: z
+    .string({
+      required_error: "Email é obrigatório",
+    })
+    .email("Email inválido"),
+  password: z
+    .string({
+      required_error: "Senha é obrigatório",
+    })
+    .min(6, {
+      message: "Senha deve conter no mínimo 6 caracteres",
+    })
+    .max(20, {
+      message: "Senha deve conter no máximo 20 caracteres",
+    }),
+});
+
+type SignUpSchemaType = z.infer<typeof SignUpSchema>;
+
 export default function Signup() {
   const [typeSelected, setTypeSelected] = useState<string>("player");
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const { setValue, handleSubmit } = useForm();
+  const {
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
   const { login, userToken } = useContext(AuthContext);
 
   if (userToken != null) {
@@ -54,7 +84,7 @@ export default function Signup() {
   return (
     <View className="flex-1 items-center justify-center">
       <Header />
-      <View className="p-4 w-full mt-5">
+      <View className="p-5 w-full mt-5">
         <View className="flex-row gap-3">
           <TouchableOpacity
             className="bg-black rounded mb-3 flex-1 p-3 h-13 gap-1 flex-row items-center"
@@ -68,7 +98,7 @@ export default function Signup() {
               Player
             </Text>
             {typeSelected === "player" && (
-              <Ionicons name="md-checkmark-circle" size={22} color="#C1FF00" />
+              <Ionicons name="md-checkmark-circle" size={21} color="#C1FF00" />
             )}
           </TouchableOpacity>
           <TouchableOpacity
@@ -83,37 +113,52 @@ export default function Signup() {
               Arena
             </Text>
             {typeSelected === "arena" && (
-              <Ionicons name="md-checkmark-circle" size={22} color="#C1FF00" />
+              <Ionicons name="md-checkmark-circle" size={21} color="#C1FF00" />
             )}
           </TouchableOpacity>
         </View>
         <View className="container mb-6">
-          <Text className="text-zinc-500 mb-1">Nome completo</Text>
-          <TextInput
-            className="bg-zinc-200 rounded p-2 h-10 mb-3 "
-            placeholder="Digite seu nome completo"
-            placeholderTextColor="#B5B5B5"
-            onChangeText={(text) => setValue("name", text)}
-          />
-          <Text className="text-zinc-500 mb-1">E-mail</Text>
-          <TextInput
-            placeholder="Digite o seu e-mail"
-            placeholderTextColor="#B5B5B5"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            className="bg-zinc-200 rounded p-2 h-10 mb-3"
-            onChangeText={(text) => setValue("email", text)}
-          />
-          <Text className="text-zinc-500 mt-1 mb-1">Senha</Text>
-          <TextInput
-            placeholder="Digite a sua senha"
-            placeholderTextColor="#B5B5B5"
-            secureTextEntry={true}
-            autoCapitalize="none"
-            keyboardType="default"
-            className="bg-zinc-200 rounded p-2 h-10"
-            onChangeText={(text) => setValue("password", text)}
-          />
+          <View className="mb-3">
+            <Text className="text-zinc-500 mb-1">Nome completo</Text>
+            <TextInput
+              className="bg-zinc-200 rounded p-2 h-10"
+              placeholder="Digite seu nome completo"
+              placeholderTextColor="#B5B5B5"
+              onChangeText={(text) => setValue("name", text)}
+            />
+            {errors.name && (
+              <Text className="text-red-600">{errors.name.message}</Text>
+            )}
+          </View>
+          <View className=" mb-3">
+            <Text className="text-zinc-500 mb-1">E-mail</Text>
+            <TextInput
+              placeholder="Digite o seu e-mail"
+              placeholderTextColor="#B5B5B5"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              className="bg-zinc-200 rounded p-2 h-10"
+              onChangeText={(text) => setValue("email", text)}
+            />
+            {errors.email && (
+              <Text className="text-red-600">{errors.email.message}</Text>
+            )}
+          </View>
+          <View>
+            <Text className="text-zinc-500 mt-1 mb-1">Senha</Text>
+            <TextInput
+              placeholder="Digite a sua senha"
+              placeholderTextColor="#B5B5B5"
+              secureTextEntry={true}
+              autoCapitalize="none"
+              keyboardType="default"
+              className="bg-zinc-200 rounded p-2 h-10"
+              onChangeText={(text) => setValue("password", text)}
+            />
+            {errors.password && (
+              <Text className="text-red-600">{errors.password.message}</Text>
+            )}
+          </View>
           {error && (
             <Text className="text-red-600 font-semibold mt-5">{error}</Text>
           )}
