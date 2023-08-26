@@ -1,0 +1,9 @@
+appId: com.fabionascimento.arenapro
+---
+- openLink: exp://192.168.1.9:8081
+- tapOn: "Entrar no sistema"
+- tapOn: "Digite o seu e-mail"
+- inputText: "gi@gmail.com"
+- tapOn: "Digite a sua senha"
+- inputText: "123456"
+- tapOn: "Entrar"
