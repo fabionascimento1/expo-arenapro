@@ -35,6 +35,7 @@ const SignUpSchema = z.object({
 type SignUpSchemaType = z.infer<typeof SignUpSchema>;
 
 export default function Signin() {
+  const { login, userToken } = useContext(AuthContext);
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,13 +44,12 @@ export default function Signin() {
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
-  const { login, userToken } = useContext(AuthContext);
 
   if (userToken != null) {
     return <Redirect href="/" />;
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SignUpSchemaType) => {
     setLoading(true);
     await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/signin`, {
       method: "POST",
@@ -69,9 +69,6 @@ export default function Signin() {
       }
     });
   };
-
-  console.log(errors.email?.message);
-
   return (
     <View className="flex-1 items-center justify-center">
       <Header />

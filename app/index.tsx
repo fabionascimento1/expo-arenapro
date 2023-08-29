@@ -13,7 +13,7 @@ export default function App() {
       return <Redirect href="/player-dashboard/" />;
     }
     if (userToken != null && type === "arena") {
-      return <Redirect href="/arena-dashboard/" />;
+      return <Redirect href="/(arena)/" />;
     }
   }
   return (
